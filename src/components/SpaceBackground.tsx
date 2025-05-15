@@ -157,13 +157,13 @@ const defaultOrbits: OrbitConfig[] = [
     duration: 22,
     direction: "normal",
   },
-  {
-    name: "Docker",
-    icon: <div>🐳</div>,
-    radius: 240,
-    duration: 24,
-    direction: "reverse",
-  },
+  // {
+  //   name: "Docker",
+  //   icon: <div>🐳</div>,
+  //   radius: 240,
+  //   duration: 24,
+  //   direction: "reverse",
+  // },
 ];
 
 export default function OrbitBackground({

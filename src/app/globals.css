@@ -134,3 +134,27 @@
 .bg-radial-gradient {
   background: radial-gradient(50% 50% at 50% 50%, currentColor 0%, rgba(255,255,255,0) 100%);
 }
+
+@keyframes slideUp {
+  from {
+    transform: translateY(120%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes text-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-text-reveal {
+  animation: text-reveal 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
