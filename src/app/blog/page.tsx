@@ -1,6 +1,5 @@
+import PostList from "@/components/blog/PostList";
 
-export default function Blog() {
-  return (
-    <div>xx</div>
-  );
+export default function BlogPage() {
+  return <PostList />;
 }
