@@ -119,7 +119,7 @@ const defaultOrbits: OrbitConfig[] = [
       </svg>
     ),
     radius: 160,
-    duration: 80,
+    duration: 50,
     direction: "reverse",
   },
   {

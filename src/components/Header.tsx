@@ -1,11 +1,17 @@
 import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 import { Github } from "lucide-react";
+import Navbar from "./Navbar";
 
 export default function Header() {
   return (
-    <div className="p-4 flex justify-between items-center">
-      <div></div>
+    <div className="flex justify-between items-center px-10 py-3">
+      <Link href="/" className="text-2xl">
+        FFFFFFFFF
+      </Link>
+
+      <Navbar />
+
       <div className="flex items-center gap-4">
         <Link
           href="https://github.com/TiezhuGG"
