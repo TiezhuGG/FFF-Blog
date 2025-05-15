@@ -120,3 +120,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.bg-radial-gradient {
+  background: radial-gradient(50% 50% at 50% 50%, currentColor 0%, rgba(255,255,255,0) 100%);
+}
