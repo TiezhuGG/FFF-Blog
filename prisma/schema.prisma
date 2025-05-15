@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../src/app/generated/prisma"
 }
 
 datasource db {
@@ -15,20 +15,36 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model User {
-  id       String   @id @default(uuid())
-  email    String   @unique
-  password String
-  verified Boolean  @default(false)
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+model Post {
+  id          String     @id @default(uuid())
+  title       String
+  slug        String     @unique
+  description String
+  content     String
+  tags        Tag[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  PostTags    PostTags[]
+
+  @@map("posts")
 }
 
-model VerificationCode {
-  id        String   @id @default(uuid())
-  email     String
-  code      String
-  used      Boolean  @default(false)
-  createAt  DateTime @default(now())
-  expiresAt DateTime
+model Tag {
+  id       String     @id @default(uuid())
+  name     String     @unique
+  posts    Post[]
+  PostTags PostTags[]
+
+  @@map("tags")
+}
+
+// 多对多关系表
+model PostTags {
+  postId String
+  tagId  String
+  post   Post   @relation(fields: [postId], references: [id])
+  tag    Tag    @relation(fields: [tagId], references: [id])
+
+  @@id([postId, tagId])
+  @@map("post_tags")
 }
