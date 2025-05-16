@@ -24,18 +24,20 @@ const emailList = ["woshitiancai1014@gmail.com", "lihongfa1014@gmail.com"];
 export default function PostItem({ post }: { post: PostFormData }) {
   const { title, slug, description, createdAt, tags } = post;
 
-  const { isSignedIn, user } = useUser();
   const [isPending, startTransition] = useTransition();
   const [isAuth, setIsAuth] = useState<boolean>(false);
+  const { isSignedIn, user, isLoaded } = useUser();
 
   useEffect(() => {
-    if (isSignedIn) {
-      const email = user?.primaryEmailAddress?.emailAddress as string;
-      if (emailList.includes(email)) {
-        setIsAuth(true);
+    if (isLoaded) {
+      if (isSignedIn && user) {
+        const email = user?.primaryEmailAddress?.emailAddress as string;
+        if (emailList.includes(email)) {
+          setIsAuth(true);
+        }
       }
     }
-  }, []);
+  }, [isLoaded]);
 
   const handleDelete = async () => {
     startTransition(async () => {
@@ -67,14 +69,17 @@ export default function PostItem({ post }: { post: PostFormData }) {
         </div>
       </div>
 
-      {/* {isAuth && ( */}
+      {isAuth && (
         <Dialog>
           <DialogTrigger asChild>
             <div className="absolute bottom-2 right-2 flex gap-4">
               <button type="button" className="hidden group-hover:block">
                 <Link href={`/blog/${slug}/edit`}>✏️</Link>
               </button>
-              <button type="button" className="hidden group-hover:block cursor-pointer">
+              <button
+                type="button"
+                className="hidden group-hover:block cursor-pointer"
+              >
                 🗑️
               </button>
             </div>
@@ -101,7 +106,7 @@ export default function PostItem({ post }: { post: PostFormData }) {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      {/* )} */}
+      )}
     </article>
   );
 }
