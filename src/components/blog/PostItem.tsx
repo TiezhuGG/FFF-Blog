@@ -49,7 +49,7 @@ export default function PostItem({ post }: { post: PostFormData }) {
   return (
     <article className="relative group border p-4 rounded-xl">
       <div className="flex flex-col">
-        <Link href={`/admin/blogs/${slug}`} key={slug}>
+        <Link href={`/blog/${slug}`} key={slug}>
           <h1 className="text-2xl">{title}</h1>
         </Link>
         <small className="text-gray-400 mt-2">{description}</small>

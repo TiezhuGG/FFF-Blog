@@ -1,15 +1,10 @@
-import PostDetail from "@/components/post-detail";
-import PostFormSkeleton from "@/components/post-form-skeleton";
-import { createClient } from "@/utils/supabase/client";
+import PostDetail from "@/components/blog/PostDetail";
+import PostFormSkeleton from "@/components/PostFormSkeleton";
+import prisma from "@/lib/client";
 import { Suspense } from "react";
 
 export async function generateStaticParams() {
-  const supabase = createClient();
-
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("slug")
-    .order("inserted_at", { ascending: false });
+  const posts = await prisma.post.findMany();
 
   return posts?.map((post) => ({ slug: post.slug })) || [];
 }
