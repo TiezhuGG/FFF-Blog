@@ -18,12 +18,11 @@ import { Spinner } from "../ui/spinner";
 import { formatDate } from "@/lib/utils";
 import { PostFormData } from "@/app/(main)/blog/actions";
 import { useUser } from "@clerk/nextjs";
-
-const emailList = ["woshitiancai1014@gmail.com"];
+import { motion } from "framer-motion";
+import { EMAILS } from "@/constants";
 
 export default function PostItem({ post }: { post: PostFormData }) {
   const { title, slug, description, createdAt, tags } = post;
-
   const [isPending, startTransition] = useTransition();
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const { isSignedIn, user, isLoaded } = useUser();
@@ -31,7 +30,7 @@ export default function PostItem({ post }: { post: PostFormData }) {
   useEffect(() => {
     if (isSignedIn && user && isLoaded) {
       const email = user?.primaryEmailAddress?.emailAddress as string;
-      if (emailList.includes(email)) {
+      if (EMAILS.includes(email)) {
         setIsAuth(true);
       }
     }
@@ -45,7 +44,15 @@ export default function PostItem({ post }: { post: PostFormData }) {
   };
 
   return (
-    <article className="relative group border p-4 rounded-xl">
+    <motion.div
+      className="relative group border p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+      whileHover={{
+        y: -5,
+        boxShadow:
+          "0 6px 10px -2px rgba(0, 0, 0, 0.08), 0 3px 5px -1px rgba(0, 0, 0, 0.04)",
+      }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+    >
       <div className="flex flex-col">
         <Link href={`/blog/${slug}`} key={slug}>
           <h1 className="text-2xl">{title}</h1>
@@ -60,7 +67,7 @@ export default function PostItem({ post }: { post: PostFormData }) {
               tags.map((tag) => (
                 <p
                   key={tag}
-                  className="bg-black text-white py-1 px-2 text-xs rounded-xl dark:bg-white dark:text-black"
+                  className="flex bg-black text-white py-1 px-2 text-xs rounded-xl dark:bg-white dark:text-black"
                 >
                   {tag}
                 </p>
@@ -106,6 +113,6 @@ export default function PostItem({ post }: { post: PostFormData }) {
           </DialogContent>
         </Dialog>
       )}
-    </article>
+    </motion.div>
   );
 }

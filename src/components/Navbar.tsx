@@ -1,5 +1,6 @@
 "use client";
 
+import { EMAILS } from "@/constants";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -15,8 +16,6 @@ const navLinks: NavLink[] = [
   { name: "Create", href: "/blog/create" },
 ];
 
-const emailList = ["woshitiancai1014@gmail.com"];
-
 export default function Navbar() {
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const { isSignedIn, user, isLoaded } = useUser();
@@ -29,7 +28,7 @@ export default function Navbar() {
 
     if (isLoaded && isSignedIn && user) {
       const email = user?.primaryEmailAddress?.emailAddress as string;
-      if (emailList.includes(email)) {
+      if (EMAILS.includes(email)) {
         setIsAuth(true);
       }
     }

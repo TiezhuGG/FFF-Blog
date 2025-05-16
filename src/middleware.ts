@@ -1,22 +1,21 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { AUTH_USER_ID } from "./constants";
 
 const isPublicRoute = createRouteMatcher([
   "/",
   "/blog",
   "/blog/((?!create.*).*)",
-  "/tags/:path*",
+  "/tags",
   "/sign-in(.*)",
   "/sign-up(.*)",
 ]);
-
-const authUserId = "user_2wgejriLGm8l84DvXC0PQow2pjD";
 
 export default clerkMiddleware(async (auth, req) => {
   const path = req.nextUrl.pathname;
 
   // 权限控制，当本人登录时才能够进行文章发布
-  if (path === "/blog/create") {
+  if (path === "/blog/create" || path === '/tags/create') {
     const { userId } = await auth();
 
     if (!userId) {
@@ -24,7 +23,7 @@ export default clerkMiddleware(async (auth, req) => {
       return NextResponse.redirect(signInUrl);
     }
 
-    if (userId !== authUserId) {
+    if (userId !== AUTH_USER_ID) {
       const homeUrl = new URL("/", req.url);
 
       return NextResponse.redirect(homeUrl);
