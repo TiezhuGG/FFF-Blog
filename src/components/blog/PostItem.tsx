@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { useEffect, useState, useTransition } from "react";
-// import { Spinner } from "../ui/spinner";
+import { Spinner } from "../ui/spinner";
 import { formatDate } from "@/lib/utils";
 import { PostFormData } from "@/app/(main)/blog/actions";
 import { useUser } from "@clerk/nextjs";
@@ -95,13 +95,12 @@ export default function PostItem({ post }: { post: PostFormData }) {
             <DialogFooter className="sm:justify-end">
               <Button
                 type="submit"
-                className="bg-red-600 text-white hover:bg-red-300"
+                className="bg-red-600 text-white hover:bg-red-300 cursor-pointer"
                 variant="secondary"
                 disabled={isPending}
                 onClick={handleDelete}
               >
-                {/* {isPending ? <Spinner /> : "Delete"} */}
-                {isPending ? "Deleting" : "Delete"}
+                {isPending ? <Spinner /> : "Delete"}
               </Button>
             </DialogFooter>
           </DialogContent>
