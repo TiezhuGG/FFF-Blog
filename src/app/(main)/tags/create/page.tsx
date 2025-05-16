@@ -52,7 +52,7 @@ export default function TagCreatePage({
 
   const onSubmit = (data: TagFormData) => {
     if (id) {
-      starTransition(() => updateTag(Number(id), data));
+      starTransition(() => updateTag(id as string, data));
     } else {
       starTransition(() => createTag(data));
     }

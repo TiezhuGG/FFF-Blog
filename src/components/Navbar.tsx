@@ -4,6 +4,17 @@ import { EMAILS } from "@/constants";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "./ui/button";
 
 interface NavLink {
   name: string;
@@ -13,7 +24,8 @@ interface NavLink {
 const navLinks: NavLink[] = [
   { name: "Home", href: "/" },
   { name: "Blog", href: "/blog" },
-  { name: "Create", href: "/blog/create" },
+  { name: "Tags", href: "/tags" },
+  { name: "Create", href: "#" },
 ];
 
 export default function Navbar() {
@@ -39,16 +51,39 @@ export default function Navbar() {
       <div className="container mx-auto flex justify-between items-center">
         <div className="hidden md:flex space-x-4">
           {navLinks
-            .filter((link) => link.name !== "Create" || isAuth)
-            .map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="transition duration-300"
-              >
-                {link.name}
-              </Link>
-            ))}
+            .filter(
+              (link) =>
+                (link.name !== "Create" && link.name !== "Tags") || isAuth
+            )
+            .map((link) => {
+              if (link.name === "Create" && isAuth) {
+                return (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <span className="cursor-pointer">Create</span>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <Link href="/blog/create">
+                        <DropdownMenuItem>Post</DropdownMenuItem>
+                      </Link>
+                      <Link href="/tags/create">
+                        <DropdownMenuItem>Tag</DropdownMenuItem>
+                      </Link>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                );
+              }
+
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="transition duration-300"
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
         </div>
 
         {/* Mobile Menu Button (optional - requires implementation) */}
