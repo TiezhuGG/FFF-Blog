@@ -80,7 +80,6 @@ export const updatePost = async (
     revalidatePath("/blog");
     return { message: "Post updated successfully", redirectUrl: "/blog" };
   } catch (error) {
-    console.error("Error updating post:", error);
     return {
       message: "Failed to update post",
     };

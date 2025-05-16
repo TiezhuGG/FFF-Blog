@@ -107,4 +107,4 @@ export const NEXTJS_ICON = (
   </svg>
 );
 
-export const DOCKER_ICON = "🐳";
+// export const DOCKER_ICON = "🐳";

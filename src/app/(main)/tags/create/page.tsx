@@ -14,7 +14,7 @@ type SearchParamsType = Promise<{
   [key: string]: string | string[] | undefined;
 }>;
 
-export const tagFormSchema = z.object({
+const tagFormSchema = z.object({
   name: z.string().min(1, {
     message: "Name can't be empty.",
   }),

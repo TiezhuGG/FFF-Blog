@@ -2,7 +2,6 @@
 
 import {
   CSS_ICON,
-  DOCKER_ICON,
   HTML_ICON,
   JS_ICON,
   NEXTJS_ICON,
