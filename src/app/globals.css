@@ -176,4 +176,13 @@
   .wmde-markdown {
     @apply p-5 rounded-md;
   }
+
+  .dark .w-md-editor {
+    color: var(--foreground) !important;
+    background-color: var(--card) !important;
+  }
+
+  .dark .w-md-editor .title {
+    color: var(--primary) !important;
+  }
 }

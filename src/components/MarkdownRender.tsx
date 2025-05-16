@@ -6,14 +6,17 @@ import { useEffect, useState } from "react";
 
 export default function MarkdownRender({ content }: { content: string }) {
   const { theme } = useTheme();
-  const [clientTheme, setClientTheme] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    setClientTheme(theme);
-  }, [theme]);
-
+  
   return (
-    <div data-color-mode={clientTheme || "light"}>
+    <div className="dark:bg-card dark:text-foreground" data-color-mode={theme}>
+      <style>{`
+        .dark .w-md-editor {
+          --color-border-default: var(--border);
+          --color-fg-default: var(--foreground);
+          --color-canvas-default: var(--card);
+          --color-canvas-subtle: var(--muted);
+        }
+      `}</style>
       <MDEditor.Markdown source={content} />
     </div>
   );
