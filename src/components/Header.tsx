@@ -5,22 +5,10 @@ import Navbar from "./Navbar";
 import {
   ClerkLoaded,
   ClerkLoading,
-  SignedIn,
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
-
-import {
-  BookIcon,
-  BookUserIcon,
-  HouseIcon,
-  Loader2,
-  Mail,
-  MessageCircle,
-  Search,
-  UserIcon,
-  Users,
-} from "lucide-react";
+import { Loader2, UserIcon } from "lucide-react";
 
 export default function Header() {
   return (
@@ -43,15 +31,22 @@ export default function Header() {
           <Github className="h-5 w-5" />
         </Link>
 
-        <SignedOut>
-          <Link
-            href="/sign-in"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <UserIcon className="h-5 w-5" />
-          </Link>
-        </SignedOut>
-        <UserButton />
+        <>
+          <ClerkLoading>
+            <Loader2 className="w-4 h-4 animate-spin" />
+          </ClerkLoading>
+          <ClerkLoaded>
+            <SignedOut>
+              <Link
+                href="/sign-in"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <UserIcon className="h-5 w-5" />
+              </Link>
+            </SignedOut>
+            <UserButton />
+          </ClerkLoaded>
+        </>
       </div>
     </div>
   );

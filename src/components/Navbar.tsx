@@ -1,4 +1,8 @@
+"use client";
+
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface NavLink {
   name: string;
@@ -8,22 +12,44 @@ interface NavLink {
 const navLinks: NavLink[] = [
   { name: "Home", href: "/" },
   { name: "Blog", href: "/blog" },
+  { name: "Create", href: "/blog/create" },
 ];
 
+const emailList = ["woshitiancai1014@gmail.com"];
+
 export default function Navbar() {
+  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const { isSignedIn, user, isLoaded } = useUser();
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      setIsAuth(false);
+      return;
+    }
+
+    if (isLoaded && isSignedIn && user) {
+      const email = user?.primaryEmailAddress?.emailAddress as string;
+      if (emailList.includes(email)) {
+        setIsAuth(true);
+      }
+    }
+  }, [isLoaded, isSignedIn, user]);
+
   return (
     <nav>
       <div className="container mx-auto flex justify-between items-center">
         <div className="hidden md:flex space-x-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="transition duration-300"
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks
+            .filter((link) => link.name !== "Create" || isAuth)
+            .map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="transition duration-300"
+              >
+                {link.name}
+              </Link>
+            ))}
         </div>
 
         {/* Mobile Menu Button (optional - requires implementation) */}

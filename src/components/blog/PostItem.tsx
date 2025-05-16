@@ -1,8 +1,8 @@
 "use client";
+
 import Link from "next/link";
 import { deletePost } from "@/app/(main)/blog/actions";
 import { toast } from "sonner";
-
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,7 @@ import { formatDate } from "@/lib/utils";
 import { PostFormData } from "@/app/(main)/blog/actions";
 import { useUser } from "@clerk/nextjs";
 
-const emailList = ["woshitiancai1014@gmail.com", "lihongfa1014@gmail.com"];
+const emailList = ["woshitiancai1014@gmail.com"];
 
 export default function PostItem({ post }: { post: PostFormData }) {
   const { title, slug, description, createdAt, tags } = post;
@@ -29,15 +29,13 @@ export default function PostItem({ post }: { post: PostFormData }) {
   const { isSignedIn, user, isLoaded } = useUser();
 
   useEffect(() => {
-    if (isLoaded) {
-      if (isSignedIn && user) {
-        const email = user?.primaryEmailAddress?.emailAddress as string;
-        if (emailList.includes(email)) {
-          setIsAuth(true);
-        }
+    if (isSignedIn && user && isLoaded) {
+      const email = user?.primaryEmailAddress?.emailAddress as string;
+      if (emailList.includes(email)) {
+        setIsAuth(true);
       }
     }
-  }, [isLoaded]);
+  }, [isLoaded, isSignedIn, user]);
 
   const handleDelete = async () => {
     startTransition(async () => {
@@ -51,22 +49,24 @@ export default function PostItem({ post }: { post: PostFormData }) {
       <div className="flex flex-col">
         <Link href={`/blog/${slug}`} key={slug}>
           <h1 className="text-2xl">{title}</h1>
+          <small className="text-gray-400 mt-2 line-clamp-1">
+            {description}
+          </small>
+          <small className="text-gray-400 mt-2">
+            {formatDate(createdAt as string, true)}
+          </small>
+          <div className="flex gap-2 mt-2">
+            {tags?.length &&
+              tags.map((tag) => (
+                <p
+                  key={tag}
+                  className="bg-black text-white py-1 px-2 text-xs rounded-xl dark:bg-white dark:text-black"
+                >
+                  {tag}
+                </p>
+              ))}
+          </div>
         </Link>
-        <small className="text-gray-400 mt-2 line-clamp-1">{description}</small>
-        <small className="text-gray-400 mt-2">
-          {formatDate(createdAt as string, true)}
-        </small>
-        <div className="flex gap-2 mt-2">
-          {tags?.length &&
-            tags.map((tag) => (
-              <p
-                key={tag}
-                className="bg-black text-white py-1 px-2 text-xs rounded-xl dark:bg-white dark:text-black"
-              >
-                {tag}
-              </p>
-            ))}
-        </div>
       </div>
 
       {isAuth && (
