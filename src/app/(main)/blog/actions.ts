@@ -1,10 +1,12 @@
 "use server";
 
 import prisma from "@/lib/client";
+import { revalidatePath } from "next/cache";
 
 export type FormState = {
   message: string;
-  errors?: Record<string, string[]>;
+  error?: string;
+  redirectUrl?: string;
 };
 
 export interface PostFormData {
@@ -20,9 +22,7 @@ export interface PostFormData {
 export const createPost = async (
   prevState: FormState | null,
   formData: PostFormData
-): Promise<FormState> => {
-  console.log("createPost action called", prevState, formData);
-
+) => {
   try {
     await prisma.post.create({
       data: {
@@ -38,11 +38,65 @@ export const createPost = async (
         },
       },
     });
+
+    revalidatePath("/blog");
+    return { message: "Post created successfully", redirectUrl: "/blog" };
   } catch (error) {
     return {
       message: "Failed to create post",
     };
   }
+};
 
-  return { message: "Post created successfully" };
+export const updatePost = async (
+  prevState: FormState | null,
+  formData: PostFormData
+): Promise<FormState> => {
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.post.update({
+        where: { slug: formData.slug },
+        data: {
+          tags: {
+            deleteMany: {}, // 清除所有关联的标签
+          },
+        },
+      });
+
+      await tx.post.update({
+        where: { slug: formData.slug },
+        data: {
+          title: formData.title,
+          description: formData.description,
+          content: formData.content,
+          tags: {
+            connectOrCreate: formData.tags?.map((tag) => ({
+              where: { name: tag },
+              create: { name: tag },
+            })),
+          },
+        },
+      });
+    });
+
+    revalidatePath("/blog");
+    return { message: "Post updated successfully", redirectUrl: "/blog" };
+  } catch (error) {
+    return {
+      message: "Failed to update post",
+    };
+  }
+};
+
+export const deletePost = async (slug: string) => {
+  try {
+    await prisma.post.delete({ where: { slug } });
+
+    revalidatePath("/blog");
+    return { message: "Post deleted successfully" };
+  } catch (error) {
+    return {
+      message: "Failed to delete post",
+    };
+  }
 };

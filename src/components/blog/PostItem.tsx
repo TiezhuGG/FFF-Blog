@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-// import { deletePost } from "@/app/(admin)/admin/blogs/actions";
-import { z } from "zod";
+import { deletePost } from "@/app/(main)/blog/actions";
 import { toast } from "sonner";
 
 import {
@@ -14,26 +13,35 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 // import { Spinner } from "../ui/spinner";
 import { formatDate } from "@/lib/utils";
 import { PostFormData } from "@/app/(main)/blog/actions";
+import { useUser } from "@clerk/nextjs";
+
+const emailList = ["woshitiancai1014@gmail.com", "lihongfa1014@gmail.com"];
 
 export default function PostItem({ post }: { post: PostFormData }) {
-  console.log("post item", post);
   const { title, slug, description, createdAt, tags } = post;
 
+  const { isSignedIn, user } = useUser();
   const [isPending, startTransition] = useTransition();
+  const [isAuth, setIsAuth] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      const email = user?.primaryEmailAddress?.emailAddress as string;
+      if (emailList.includes(email)) {
+        setIsAuth(true);
+      }
+    }
+  }, []);
 
   const handleDelete = async () => {
-    // startTransition(async () => {
-    //   const { message, error } = await deletePost(slug);
-    //   if (error) {
-    //     toast.error(error);
-    //     return;
-    //   }
-    //   toast.success(message);
-    // });
+    startTransition(async () => {
+      const { message } = await deletePost(slug);
+      toast(message);
+    });
   };
 
   return (
@@ -59,39 +67,41 @@ export default function PostItem({ post }: { post: PostFormData }) {
         </div>
       </div>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <div className="absolute bottom-2 right-2 flex gap-4">
-            <button type="button" className="hidden group-hover:block">
-              <Link href={`/admin/blogs/${slug}/edit`}>✏️</Link>
-            </button>
-            <button type="button" className="hidden group-hover:block">
-              🗑️
-            </button>
-          </div>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Are you sure delete this post?</DialogTitle>
-            <DialogDescription>
-              It cannot be restored after deletion
-            </DialogDescription>
-          </DialogHeader>
+      {/* {isAuth && ( */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <div className="absolute bottom-2 right-2 flex gap-4">
+              <button type="button" className="hidden group-hover:block">
+                <Link href={`/blog/${slug}/edit`}>✏️</Link>
+              </button>
+              <button type="button" className="hidden group-hover:block cursor-pointer">
+                🗑️
+              </button>
+            </div>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Are you sure delete this post?</DialogTitle>
+              <DialogDescription>
+                It cannot be restored after deletion
+              </DialogDescription>
+            </DialogHeader>
 
-          <DialogFooter className="sm:justify-end">
-            <Button
-              type="submit"
-              className="bg-red-600 text-white hover:bg-red-300"
-              variant="secondary"
-              disabled={isPending}
-              onClick={handleDelete}
-            >
-              {/* {isPending ? <Spinner /> : "Delete"} */}
-              {isPending ? "Deleting" : "Delete"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <DialogFooter className="sm:justify-end">
+              <Button
+                type="submit"
+                className="bg-red-600 text-white hover:bg-red-300"
+                variant="secondary"
+                disabled={isPending}
+                onClick={handleDelete}
+              >
+                {/* {isPending ? <Spinner /> : "Delete"} */}
+                {isPending ? "Deleting" : "Delete"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      {/* )} */}
     </article>
   );
 }
