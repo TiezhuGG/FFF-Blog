@@ -52,7 +52,7 @@ export default function PostItem({ post }: { post: PostFormData }) {
         <Link href={`/blog/${slug}`} key={slug}>
           <h1 className="text-2xl">{title}</h1>
         </Link>
-        <small className="text-gray-400 mt-2">{description}</small>
+        <small className="text-gray-400 mt-2 line-clamp-1">{description}</small>
         <small className="text-gray-400 mt-2">
           {formatDate(createdAt as string, true)}
         </small>
@@ -61,7 +61,7 @@ export default function PostItem({ post }: { post: PostFormData }) {
             tags.map((tag) => (
               <p
                 key={tag}
-                className="bg-black text-white py-1 px-2 text-sm rounded-xl dark:bg-white dark:text-black"
+                className="bg-black text-white py-1 px-2 text-xs rounded-xl dark:bg-white dark:text-black"
               >
                 {tag}
               </p>
