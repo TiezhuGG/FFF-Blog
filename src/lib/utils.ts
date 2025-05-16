@@ -7,9 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatDate(date: string, includeRelative = false) {
   const currentDate = new Date();
-  if (!date.includes("T")) {
-    date = `${date}T00:00:00`;
-  }
+  // if (!date.includes("T")) {
+  //   date = `${date}T00:00:00`;
+  // }
 
   const targetDate = new Date(date);
 

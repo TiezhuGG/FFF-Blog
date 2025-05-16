@@ -16,15 +16,12 @@ import {
 import { Button } from "../ui/button";
 import { useTransition } from "react";
 // import { Spinner } from "../ui/spinner";
-import { formSchema } from "./PostForm";
 import { formatDate } from "@/lib/utils";
+import { PostFormData } from "@/app/(main)/blog/actions";
 
-interface postProp extends z.infer<typeof formSchema> {
-  inserted_at: string;
-}
-
-export default function PostItem({ post }: { post: postProp }) {
-  const { title, slug, description, inserted_at, tags } = post;
+export default function PostItem({ post }: { post: PostFormData }) {
+  console.log("post item", post);
+  const { title, slug, description, createdAt, tags } = post;
 
   const [isPending, startTransition] = useTransition();
 
@@ -35,7 +32,6 @@ export default function PostItem({ post }: { post: postProp }) {
     //     toast.error(error);
     //     return;
     //   }
-
     //   toast.success(message);
     // });
   };
@@ -48,7 +44,7 @@ export default function PostItem({ post }: { post: postProp }) {
         </Link>
         <small className="text-gray-400 mt-2">{description}</small>
         <small className="text-gray-400 mt-2">
-          {formatDate(inserted_at, true)}
+          {formatDate(createdAt as string, true)}
         </small>
         <div className="flex gap-2 mt-2">
           {tags?.length &&
@@ -91,7 +87,7 @@ export default function PostItem({ post }: { post: postProp }) {
               onClick={handleDelete}
             >
               {/* {isPending ? <Spinner /> : "Delete"} */}
-              {isPending ? 'Deleting' : "Delete"}
+              {isPending ? "Deleting" : "Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>
