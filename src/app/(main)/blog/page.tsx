@@ -5,6 +5,7 @@ export default async function BlogPage() {
   const posts =
     (await prisma.post.findMany({
       include: { tags: true },
+      orderBy: { createdAt: "desc" },
     })) || [];
 
   const formattedPosts = posts.map((post) => ({
