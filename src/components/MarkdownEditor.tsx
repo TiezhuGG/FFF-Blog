@@ -4,6 +4,10 @@ import rehypeRaw from "rehype-raw";
 // 动态加载避免SSR问题
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
+const proxyImage = (url: string) => {
+  return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+}
+
 export default function MarkdownEditor({
   value,
   setValue,
@@ -23,7 +27,7 @@ export default function MarkdownEditor({
             // 自定义图片组件
             img: ({ src, alt }) => (
               <img
-                src={src}
+                src={proxyImage(src as string)}
                 alt={alt}
                 referrerPolicy="no-referrer"  // 新增防盗链处理
                 style={{
