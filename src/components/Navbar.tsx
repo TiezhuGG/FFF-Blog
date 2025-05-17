@@ -43,48 +43,46 @@ export default function Navbar() {
 
   return (
     <nav>
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="hidden md:flex space-x-4">
-          {navLinks
-            .filter(
-              (link) =>
-                (link.name !== "Create" && link.name !== "Tags") || isAuth
-            )
-            .map((link) => {
-              if (link.name === "Create" && isAuth) {
-                return (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <span className="cursor-pointer">Create</span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <Link href="/blog/create">
-                        <DropdownMenuItem>Post</DropdownMenuItem>
-                      </Link>
-                      <Link href="/tags/create">
-                        <DropdownMenuItem>Tag</DropdownMenuItem>
-                      </Link>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                );
-              }
-
+      <div className="text-xl hidden md:flex space-x-8">
+        {navLinks
+          .filter(
+            (link) => (link.name !== "Create" && link.name !== "Tags") || isAuth
+          )
+          .map((link) => {
+            if (link.name === "Create" && isAuth) {
               return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="transition duration-300"
-                >
-                  {link.name}
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <span className="cursor-pointer">Create</span>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <Link href="/blog/create">
+                      <DropdownMenuItem>Post</DropdownMenuItem>
+                    </Link>
+                    <Link href="/tags/create">
+                      <DropdownMenuItem>Tag</DropdownMenuItem>
+                    </Link>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               );
-            })}
-        </div>
+            }
 
-        {/* Mobile Menu Button (optional - requires implementation) */}
-        {/* You would typically add a button here for mobile menus */}
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="transition duration-300"
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+      </div>
 
-        {/* <div className="md:hidden">
+      {/* Mobile Menu Button (optional - requires implementation) */}
+      {/* You would typically add a button here for mobile menus */}
+
+      {/* <div className="md:hidden">
           <button className="text-white">
             <svg
               className="w-6 h-6"
@@ -102,7 +100,6 @@ export default function Navbar() {
             </svg>
           </button>
         </div> */}
-      </div>
     </nav>
   );
 }

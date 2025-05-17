@@ -46,7 +46,7 @@ export const formSchema = z.object({
 });
 
 // 延迟加载编辑器
-const MarkdownEditor = dynamic(() => import("@/components/MarkdownEditor"), {
+const MarkdownEditor = dynamic(() => import("@/components/markdown/MarkdownEditor"), {
   ssr: false,
   loading: () => (
     <div className="h-[500px] bg-gray-50 animate-pulse rounded-lg" />

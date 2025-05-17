@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import MarkdownRender from "../MarkdownRender";
+import MarkdownRender from "../markdown/MarkdownRender";
 import BackButton from "../BackButton";
 import { formatDate } from "@/lib/utils";
 import prisma from "@/lib/client";
