@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "p3-juejin.byteimg.com",
+        hostname: "**",
       },
     ],
   },
